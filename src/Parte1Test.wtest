@@ -1,0 +1,97 @@
+import Cervezas.*
+import Jarras.*
+import Personas.*
+import Carpas.*
+
+describe "Se viene el oktubre fest: parte 1" {
+	
+	const pilsner = new CervezaRubia(lupulo = 5, pais = "Alemania", graduacionPorLitro = 0.1)
+	const stellaArtois = new CervezaNegra(lupulo = 3, pais = "Belgica", graduacionMundial = 5)
+	const andes = new CervezaRoja(lupulo = 6, pais = "Argentina", porcentajeAlcohol = 15)
+	const carpa1 = new Carpa(limiteGente = 5, tieneBanda = true, marcaVendida = andes)
+	const carpa2 = new Carpa(limiteGente = 5, tieneBanda = false, marcaVendida = stellaArtois)
+	const carpa3 = new Carpa(limiteGente = 3, tieneBanda = false, marcaVendida = pilsner)
+	const jarra1 = new Jarra(capacidad = 0.5, marca = pilsner, servidaEn =  carpa3)
+	const jarra2 = new Jarra(capacidad = 1, marca = stellaArtois, servidaEn = carpa2)
+	const jarra3 = new Jarra(capacidad = 0.4, marca = andes, servidaEn = carpa1)
+	const jorge = new Aleman(peso = 60, escuchaMusicaTradicional = true, nivelAguante = 200, paisDeNacimiento = "Alemania")
+	const lucas = new Belga(peso = 50, escuchaMusicaTradicional = false, nivelAguante = 100, paisDeNacimiento = "Belgica")
+	const ludmila = new Checo(peso = 45, escuchaMusicaTradicional = true, nivelAguante = 150, paisDeNacimiento = "Rep.Checa")
+	
+	fixture {
+		
+		jorge.comprarJarra(jarra1)
+		jorge.comprarJarra(jarra2)
+		jorge.comprarJarra(jarra2)
+		lucas.comprarJarra(jarra1)
+		lucas.comprarJarra(jarra3)
+		lucas.comprarJarra(jarra3)
+		ludmila.comprarJarra(jarra1)
+		ludmila.comprarJarra(jarra1)
+	 	ludmila.comprarJarra(jarra3)
+		
+	}
+	
+	test "Graducaciones" {
+			
+	assert.equals(0.1, pilsner.graduacionPorLitro())
+	assert.equals(0.06, stellaArtois.graduacionPorLitro())
+	assert.equals(0.1875, andes.graduacionPorLitro())
+			
+	}
+		
+	test "Contenido De Alcohol" {
+			
+		assert.equals(0.05, jarra1.contenidoDeAlcohol())
+		assert.equals(0.06, jarra2.contenidoDeAlcohol())
+		assert.equals(0.075, jarra3.contenidoDeAlcohol())
+			
+	}
+		
+	test "Qué les gusta" {
+			
+		assert.that(jorge.leGusta(pilsner))
+		assert.that(jorge.leGusta(andes))
+		assert.that(jorge.leGusta(stellaArtois))
+		assert.that(lucas.leGusta(pilsner))
+		assert.that(lucas.leGusta(andes))
+		assert.notThat(lucas.leGusta(stellaArtois))
+		assert.that(ludmila.leGusta(pilsner))
+		assert.that(ludmila.leGusta(andes))
+		assert.notThat(ludmila.leGusta(stellaArtois))
+				
+	}
+		
+	test "Cuánto consumieron" {
+			
+		assert.equals(0.17, jorge.totalDeAlcoholIngerido())
+		assert.equals(0.2, lucas.totalDeAlcoholIngerido())
+		assert.equals(0.175, ludmila.totalDeAlcoholIngerido())
+			
+	}
+		
+	test "Todos joya" {
+			
+		assert.notThat(jorge.estaEbria())
+		assert.notThat(lucas.estaEbria())
+		assert.notThat(ludmila.estaEbria())
+			
+	}
+		
+	test "Todo correcto" {
+			
+		assert.notThat(jorge.esEbrioEmpedernido())
+		assert.notThat(lucas.esEbrioEmpedernido())
+		assert.notThat(ludmila.esEbrioEmpedernido())
+			
+	}
+		
+	test "Tenemos ebrios emperdernidos en las carpas?" {
+			
+		assert.equals(0, carpa1.cantidadDeEbriosEmpedernidos())
+		assert.equals(0, carpa2.cantidadDeEbriosEmpedernidos())
+		assert.equals(0, carpa3.cantidadDeEbriosEmpedernidos())
+			
+	}
+	
+}
